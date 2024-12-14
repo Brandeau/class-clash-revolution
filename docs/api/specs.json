@@ -202,6 +202,9 @@
                     "name": {
                         "type": "string"
                     },
+                    "description":{
+                        "type": "string"
+                    },
                     "power": {
                         "type": "number"
                     }
