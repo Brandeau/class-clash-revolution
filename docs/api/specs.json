@@ -181,6 +181,10 @@
                     "name": {
                         "type": "string"
                     },
+
+                    "health":{
+                        "type": "number"
+                    },
                     "moveset":{
                         "type": "array",
                         "items":{
