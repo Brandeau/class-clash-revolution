@@ -1,0 +1,279 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "Class Clash Revolution API",
+        "description": "Internal API for the game",
+        "version": "1.0.0",
+        "contact": {
+            "name": "Diego Brandeau"
+        },
+        "license": {
+            "name": "UNLICENSED"
+        }
+    },
+    "servers": [
+        {
+            "description": "Local server",
+            "url": "http://localhost:3000"
+        }
+    ],
+    "paths": {
+        "/players": {
+            "post": {
+                "summary": "Create a new player",
+                "requestBody":{
+                    "content": {
+                        "application/json":{
+                                "schema": {
+                                    "$ref": "#/components/schemas/Player"
+                                }
+                            }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "New player created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "message": { "type": "string" }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalError"
+                    }
+                }
+            },
+            "get":{
+                "summary": "Retrieve list of players",
+                "responses": {
+                    "200": {
+                        "description": "List of players successfully retrieved",
+                        "content": {
+                            "application/json":{
+                                "schema": {
+                                        "$ref": "#/components/schemas/Players"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalError"
+                    }
+                }
+            }
+        },
+        "/clashers": {
+            "get": {
+                "summary": "Retrieve list of clashers",
+                "responses": {
+                    "200": {
+                        "description": "Clashers successfully retrieved",
+                        "content": {
+                            "application/json":{
+                                "schema": {
+                                    "$ref": "#/components/schemas/Clashers"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalError"
+                    }
+                }
+            }
+        },
+        "/players/{id}/clasher": {
+            "post": {
+                "requestBody": {
+                    "content": {
+                            "application/json":{
+                                "schema": {
+                                    "$ref": "#/components/schemas/Clasher"
+                                }
+                            }
+                        }
+                },
+                "parameters":[
+                    {
+                      "$ref": "#/components/parameters/id"
+                      }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Clasher successfully selected",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "message": { "type": "string" }
+                                    }
+                                },
+                                "example": { "message": "Clasher selected successfully." }
+                            }
+                        }  
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalError"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Player": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "number"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "clashers": {
+                        "type": "array",
+                        "items":{
+                            "$ref": "#/components/schemas/Clasher"
+                        }
+                    }
+                }   
+            },
+            "Players": {
+                "type": "array",
+                "items":{
+                    "$ref": "#/components/schemas/Player"
+                }
+            },
+            "Clasher": {
+                "type": "object",
+                "properties":{
+                    "name": {
+                        "type": "string"
+                    },
+                    "moveset":{
+                        "type": "array",
+                        "items":{
+                            "$ref": "#/components/schemas/Move"
+                        }
+                    }
+                }
+                
+            },
+            "Clashers": {
+                "type": "array",
+                "items":{
+                    "$ref": "#/components/schemas/Clasher"
+                }
+            },
+            "Move": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "power": {
+                        "type": "number"
+                    }
+                }
+            },
+            "CommonResourceIdentifier":{
+                "title": "CommonResourceIdentifier",
+                "description": "Numerical unique identifier for a given resource",
+                "type": "integer",
+                "minimum": 1
+            }
+        },
+        "parameters": {
+            "id":{
+                "description": "Path identifier for a resource",
+                "required": true,
+                "schema": {
+                    "$ref": "#/components/schemas/CommonResourceIdentifier"
+                },
+                "in": "path",
+                "name": "id"
+            }
+        },
+        "responses":{
+            "BadRequest": {
+                "description": "Bad Request",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "error": {
+                                    "type": "string",
+                                    "example": "Invalid input"
+                                        }
+                                    }
+                            }
+                        }
+                    }
+            },
+            "NotFound": {
+                "description": "Not Found",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "string",
+                          "example": "Resource not found"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+            "InternalError": {
+                "description": "Internal Server Error",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "string",
+                          "example": "Internal server error"
+                            }
+                        }
+                    }
+                  }
+                }
+            }
+        }       
+    }
+}
