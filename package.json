@@ -1,0 +1,25 @@
+{
+  "name": "class-clash-revolution",
+  "version": "1.0.0",
+  "description": "a JavaScript game for the browser",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Brandeau/class-clash-revolution.git"
+  },
+  "keywords": [
+    "game"
+  ],
+  "author": "Diego Brandeau",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/Brandeau/class-clash-revolution/issues"
+  },
+  "homepage": "https://github.com/Brandeau/class-clash-revolution#readme"
+}
