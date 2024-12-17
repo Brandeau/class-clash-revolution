@@ -152,22 +152,35 @@
     },
     "components": {
         "schemas": {
-            "Player": {
+            "BasePlayer": {
                 "type": "object",
                 "properties": {
-                    "id": {
-                        "type": "number"
-                    },
                     "name": {
                         "type": "string"
-                    },
-                    "clashers": {
-                        "type": "array",
-                        "items":{
-                            "$ref": "#/components/schemas/Clasher"
-                        }
                     }
-                }   
+                }
+            },
+            "Player": {
+                "type": "object",
+                "allOf": [
+                    {"$ref": "#/components/schemas/BasePlayer"},
+                    {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "number",
+                            "format": "uuid"
+                        },
+                        "clashers": {
+                            "type": "array",
+                            "items":{
+                                "$ref": "#/components/schemas/Clasher"
+                                }
+                            }
+                        },
+                        "required": ["id"]
+                    }   
+                ]
             },
             "Players": {
                 "type": "array",
