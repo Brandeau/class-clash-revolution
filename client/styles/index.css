@@ -6,7 +6,13 @@ main {
     align-items: center;
 }
 
-main input {
+form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+form input {
     width: 300px;
     justify-content: center;
 }
