@@ -10,8 +10,21 @@
 <body>
     <main>
         <h1>Class Clash Revolution</h1>
-        <input type="text" id="username" name="username" placeholder="Enter your username">
-        <button type="button" id="start-button">Start Game</button>
+        <form id="username-form">
+            <input
+            type="text" 
+            id="username" 
+            name="username" 
+            placeholder="Enter your username" 
+            minlength="3" 
+            maxlength="16" 
+            required>
+            <button 
+            type="submit" 
+            id="start-button">
+            Start Game
+            </button>
+        </form>
     </main>
 </body>
 </html>
