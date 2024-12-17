@@ -1,0 +1,18 @@
+main {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    text-align: center;
+    align-items: center;
+}
+
+main input {
+    width: 300px;
+    justify-content: center;
+}
+
+#start-button {
+    display: inline;
+    width: 100 px;
+    margin-top: 20px;
+}
