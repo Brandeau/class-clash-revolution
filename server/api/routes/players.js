@@ -1,7 +1,18 @@
 import crypto from 'crypto';
 
+/**
+ * @import {Request, Response, NextFunction} from "express";
+ */
+
 const players = [];
 
+/**
+ * 
+ * @param {Request} req 
+ * @param {Response} res 
+ * @param {NextFunction} next 
+ * @returns 
+ */
 export function getPlayers(req, res, next) {
     try {
         return res.status(200).json(players);
@@ -10,6 +21,13 @@ export function getPlayers(req, res, next) {
     }
 }
 
+/**
+ * 
+ * @param {Request} req 
+ * @param {Response} res 
+ * @param {NextFunction} next 
+ * @returns 
+ */
 export function createPlayer(req, res, next){
     const uuid = crypto.randomUUID();
     const name = req.body.name;
