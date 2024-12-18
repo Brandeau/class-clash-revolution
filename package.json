@@ -3,11 +3,13 @@
   "version": "1.0.0",
   "description": "a JavaScript game for the browser",
   "main": "index.js",
+  "type": "module",
   "directories": {
     "doc": "docs"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "start": "node server/bin/www.js"
   },
   "repository": {
     "type": "git",
@@ -23,6 +25,7 @@
   },
   "homepage": "https://github.com/Brandeau/class-clash-revolution#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.21.2"
   }
 }
