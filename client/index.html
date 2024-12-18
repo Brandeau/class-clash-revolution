@@ -3,28 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="/client/scripts/script.js" defer></script>
-    <link rel="stylesheet" href="styles/index.css">
+    <script src="./scripts/script.js" defer></script>
+    <link rel="stylesheet" href="./styles/index.css">
     <title>Class Clash Revolution</title>
 </head>
 <body>
     <main>
-        <h1>Class Clash Revolution</h1>
-        <form id="username-form">
-            <input
-            type="text" 
-            id="username" 
-            name="username" 
-            placeholder="Enter your username" 
-            minlength="3" 
-            maxlength="16" 
-            required>
-            <button 
-            type="submit" 
-            id="start-button">
-            Start Game
-            </button>
-        </form>
+        <section id="login">
+            <h1>Class Clash Revolution</h1>
+            <form id="username-form">
+                <input
+                type="text" 
+                id="username" 
+                name="username" 
+                placeholder="Enter your username" 
+                minlength="3" 
+                maxlength="16" 
+                required>
+                <button 
+                type="submit" 
+                id="start-button">
+                Start Game
+                </button>
+            </form>
+        </section>
+        <section id="character-selection">
+            <form>
+                <fieldset>
+                    <legend>Choose Your Fighter</legend>
+                    <div>
+                        <img>
+                        <input type="radio" id="char1" name="character">
+                        <label for="char1">Luigi</label>
+                    </div>
+                    <div>
+                        <img>
+                        <input type="radio" id="char2" name="character">
+                        <label for="char2">Tracy</label>
+                    </div>
+                </fieldset>
+                <div>
+                    <button type="submit">Fight!</button>
+                  </div>
+            </form>
+        </section>
     </main>
 </body>
 </html>
