@@ -3,7 +3,8 @@ const startButton = document.getElementById('start-button');
 const usernameForm = document.getElementById('username-form');
 const characterForm = document.getElementById('character-form');
 
-let player;
+let player = {};
+let clashers = [];
 
 /**
  * 
@@ -27,24 +28,30 @@ async function createBasePlayer(event){
             const playerData = await response.json();
             player = playerData;
             getPlayer(player.id)    
-            console.log(player)
 
         } catch(e){
             console.error(e)
         }
 }
 
+/**
+ * 
+ * @param {UUID} playerId 
+ */
 async function getPlayer(playerId){
     try{
         const response = await fetch(`http://localhost:3000/api/players/${playerId}`);
         const data = await response.json();
-        console.log(data);
         
     } catch(e){
         console.error("Error getting player:", e)
     }
 }
 
+/**
+ * 
+ * @param {SubmitEvent} event 
+ */
 async function chooseClasher(event){
     event.preventDefault();
     
@@ -52,13 +59,35 @@ async function chooseClasher(event){
     try{
         const response = await fetch('http://localhost:3000/api/clashers');
         const data = await response.json();
-        player.clashers.push(data[selectedChar])
-        console.log(player.clashers)
-        console.log(data["luigi"])
+
+        clashers.push(data[selectedChar]);
+        addClasher();
 
     } catch(e){
 
     }
+}
+
+/**
+ * Adds the selected clasher to the player's clasher array property
+ */
+async function addClasher(){
+    
+    try{    
+        const playerId = player.id;
+        const clasher = clashers[0];
+        const response = await fetch(`http://localhost:3000/api/players/${playerId}`,{
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(clasher)
+        })
+        const data = await response.json();
+
+    } catch(e){
+        console.error("Error updating player:", e)    }
+
 }
 
 usernameForm.addEventListener('submit', createBasePlayer);

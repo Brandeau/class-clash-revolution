@@ -65,3 +65,18 @@ export function getPlayerHandler(req, res, next){
         return next(e);
     }
 }
+
+export function addClasherHandler(req, res, next){
+    try{
+        const {id} = req.params;
+        const newClasher = req.body;
+
+        const player = players.find((player) => player.id === id);
+
+        player.clashers.push(newClasher);
+
+        return res.status(200).json(player)
+    }catch(e){
+        return next(e);
+    }
+}
