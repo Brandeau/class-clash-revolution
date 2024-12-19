@@ -11,9 +11,9 @@ const players = [];
  * @param {Request} req 
  * @param {Response} res 
  * @param {NextFunction} next 
- * @returns 
+ * @returns {Response | void}
  */
-export function getPlayers(req, res, next) {
+export function getPlayersHandler(req, res, next) {
     try {
         return res.status(200).json(players);
     } catch(e) {
@@ -26,21 +26,41 @@ export function getPlayers(req, res, next) {
  * @param {Request} req 
  * @param {Response} res 
  * @param {NextFunction} next 
- * @returns 
+ * @returns {Response | void}
  */
-export function createPlayer(req, res, next){
+export function createPlayerHandler(req, res, next){
     const uuid = crypto.randomUUID();
-    const name = req.body.name;
+    const {name} = req.body;
     const player = { 
         id: uuid,
         name: name,
-        catchers: []
+        clashers: []
     }
 
     players.push(player);
 
     try {
-        return res.status(200).json(players);
+        return res.status(200).json(player);
+    } catch(e) {
+        return next(e);
+    }
+}
+
+/**
+ * 
+ * @param {Request} req 
+ * @param {Response} res 
+ * @param {NextFunction} next 
+ * @returns {Response | void}
+ */
+export function getPlayerHandler(req, res, next){
+
+    try {
+        const {id} = req.params;
+
+        const player = players.find((player) => player.id === id);
+
+        return res.status(200).json(player);
     } catch(e) {
         return next(e);
     }
