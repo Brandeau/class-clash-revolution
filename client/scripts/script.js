@@ -3,7 +3,8 @@ const startButton = document.getElementById('start-button');
 const usernameForm = document.getElementById('username-form');
 const characterForm = document.getElementById('character-form');
 
-let player = {};
+let player;
+let playerId;
 let clashers = [];
 
 /**
@@ -26,8 +27,7 @@ async function createBasePlayer(event){
                 })
             });
             const playerData = await response.json();
-            player = playerData;
-            getPlayer(player.id)    
+            playerId = playerData.id;    
 
         } catch(e){
             console.error(e)
@@ -74,7 +74,6 @@ async function chooseClasher(event){
 async function addClasher(){
     
     try{    
-        const playerId = player.id;
         const clasher = clashers[0];
         const response = await fetch(`http://localhost:3000/api/players/${playerId}`,{
             method: 'PATCH',
@@ -84,6 +83,7 @@ async function addClasher(){
             body: JSON.stringify(clasher)
         })
         const data = await response.json();
+        player = data;
 
     } catch(e){
         console.error("Error updating player:", e)    }
