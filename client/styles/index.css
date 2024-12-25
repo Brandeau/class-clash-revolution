@@ -22,3 +22,7 @@ form input {
     width: 100 px;
     margin-top: 20px;
 }
+
+.attackButtonListClass {
+    list-style: none;
+}

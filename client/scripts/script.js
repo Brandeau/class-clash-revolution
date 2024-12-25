@@ -2,6 +2,7 @@
 const startButton = document.getElementById('start-button');
 const usernameForm = document.getElementById('username-form');
 const characterForm = document.getElementById('character-form');
+const attackSection = document.getElementById('attacks');
 
 let player;
 let playerId;
@@ -48,12 +49,7 @@ async function getPlayer(playerId){
     }
 }
 
-/**
- * 
- * @param {SubmitEvent} event 
- */
-async function chooseClasher(event){
-    event.preventDefault();
+async function chooseClasher(){
     
     const selectedChar = characterForm.elements.character.value;
     try{
@@ -61,7 +57,6 @@ async function chooseClasher(event){
         const data = await response.json();
 
         clashers.push(data[selectedChar]);
-        addClasher();
 
     } catch(e){
 
@@ -90,5 +85,28 @@ async function addClasher(){
 
 }
 
+async function createAttackList(){
+    const moves = player.clashers[0].moveset[0];
+    const attackUl = document.createElement("ul");
+    attackUl.className = 'attackButtonListClass';
+
+    for (const key in moves) {
+        const li = document.createElement('li');
+        const attackButton = document.createElement('button');
+        li.textContent = moves[key].name;
+        attackButton.appendChild(li)
+        attackUl.appendChild(attackButton);
+      }
+
+    attackSection.append(attackUl);
+}
+
+async function startFightHandler(event){
+    event.preventDefault();
+    await chooseClasher();
+    await addClasher();
+    await createAttackList();
+}
+
 usernameForm.addEventListener('submit', createBasePlayer);
-characterForm.addEventListener('submit', chooseClasher);
+characterForm.addEventListener('submit', startFightHandler);
