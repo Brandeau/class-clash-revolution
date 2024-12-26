@@ -34,6 +34,7 @@ export function createPlayerHandler(req, res, next){
     const player = { 
         id: uuid,
         name: name,
+        isPlaying: false,
         clashers: []
     }
 
