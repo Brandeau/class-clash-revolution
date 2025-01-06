@@ -85,18 +85,43 @@ async function addClasher(){
 
 }
 
+async function handleAttackButtonClick(){
+    const opponentId = "b5f5631e-915e-4a6a-827a-b2e82515f5a3";
+
+    try{
+        const response = await fetch(`http://localhost:3000/api/players/${opponentId}/health`, {
+            method: "PATCH",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: this.dataset.name,
+                description: this.dataset.description,
+                power: this.dataset.power
+            })
+        })
+        const health = await response.json();
+    }catch(e){
+        console.error("Something went wrong")
+    }
+}
+
 async function createAttackList(){
-    const moves = player.clashers[0].moveset[0];
+    const moves = player.clashers[0].moveset;
     const attackUl = document.createElement("ul");
     attackUl.className = 'attackButtonListClass';
 
-    for (const key in moves) {
+    for(let i = 0; i < moves.length; i++){
         const li = document.createElement('li');
         const attackButton = document.createElement('button');
-        li.textContent = moves[key].name;
+        attackButton.dataset.name = moves[i].name;
+        attackButton.dataset.description = moves[i].description;
+        attackButton.dataset.power = moves[i].power;
+        attackButton.onclick = handleAttackButtonClick;
+        li.textContent = moves[i].name;
         attackButton.appendChild(li)
         attackUl.appendChild(attackButton);
-      }
+    }
 
     attackSection.append(attackUl);
 }

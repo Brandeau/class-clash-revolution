@@ -1,10 +1,9 @@
 import crypto from 'crypto';
+import { players } from '../../data/players.js';
 
 /**
  * @import {Request, Response, NextFunction} from "express";
  */
-
-const players = [];
 
 /**
  * 
@@ -79,5 +78,26 @@ export function addClasherHandler(req, res, next){
         return res.status(200).json(player)
     }catch(e){
         return next(e);
+    }
+}
+
+export function attackOpponentHandler(req, res, next){
+    try{
+      const {id} = req.params;
+      const attack = req.body;
+      console.log(attack);
+
+      const player = players.find((player) => player.id === id);
+
+      if(Object.keys(attack).length != 0 || !attack){
+        
+        player.clashers[0].health = player.clashers[0].health - attack.power;
+        return res.status(200).json(player.clashers[0].health);
+      }
+
+      return res.status(200).json(player.clashers[0].health);
+
+    }catch(e){
+        return next(e)
     }
 }
