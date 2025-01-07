@@ -1,5 +1,7 @@
 import crypto from 'crypto';
 import { players } from '../../data/players.js';
+import { tryCatch } from '../../utils.js';
+import { create } from 'domain';
 
 /**
  * @import {Request, Response, NextFunction} from "express";
@@ -13,7 +15,7 @@ import { players } from '../../data/players.js';
  * @param {NextFunction} next 
  * @returns {Response | void}
  */
-export function getPlayersHandler(req, res, next) {
+function getPlayers(req, res, next) {
     try {
         return res.status(200).json(players);
     } catch(e) {
@@ -22,30 +24,27 @@ export function getPlayersHandler(req, res, next) {
 }
 
 /**
- * Creates a full player object by adding a uui, empty clashers array and the isPlaying property, puts the player in an players array and responds with the player
+ * Creates the player
  * 
  * @param {Request} req 
  * @param {Response} res 
  * @param {NextFunction} next 
  * @returns {Response | void}
  */
-export function createPlayerHandler(req, res, next){
-    const uuid = crypto.randomUUID();
-    const {name} = req.body;
-    const player = { 
-        id: uuid,
-        name: name,
-        isPlaying: false,
-        clashers: []
-    }
+function createPlayer(req, res, next){
+  const uuid = crypto.randomUUID();
+  const {name} = req.body;
+  const player = { 
+      id: uuid,
+      name: name,
+      isPlaying: false,
+      clashers: []
+  }
 
-    players.push(player);
+  players.push(player);
 
-    try {
-        return res.status(200).json(player);
-    } catch(e) {
-        return next(e);
-    }
+  return res.status(200).json(player);
+
 }
 
 /**
@@ -56,17 +55,14 @@ export function createPlayerHandler(req, res, next){
  * @param {NextFunction} next 
  * @returns {Response | void}
  */
-export function getPlayerHandler(req, res, next){
+function getPlayer(req, res, next){
 
-    try {
-        const {id} = req.params;
+  const {id} = req.params;
 
-        const player = players.find((player) => player.id === id);
+  const player = players.find((player) => player.id === id);
 
-        return res.status(200).json(player);
-    } catch(e) {
-        return next(e);
-    }
+  return res.status(200).json(player);
+
 }
 
 /**
@@ -77,19 +73,17 @@ export function getPlayerHandler(req, res, next){
  * @param {NextFunction} next 
  * @returns {Response | void}
  */
-export function addClasherHandler(req, res, next){
-    try{
-        const {id} = req.params;
-        const newClasher = req.body;
+function addClasher(req, res, next){
 
-        const player = players.find((player) => player.id === id);
+  const {id} = req.params;
+  const newClasher = req.body;
 
-        player.clashers.push(newClasher);
+  const player = players.find((player) => player.id === id);
 
-        return res.status(200).json(player)
-    }catch(e){
-        return next(e);
-    }
+  player.clashers.push(newClasher);
+
+  return res.status(200).json(player)
+
 }
 
 /**
@@ -100,23 +94,28 @@ export function addClasherHandler(req, res, next){
  * @param {NextFunction} next 
  * @returns {Response | void}
  */
-export function attackOpponentHandler(req, res, next){
-    try{
-      const {id} = req.params;
-      const attack = req.body;
-      console.log(attack);
+function attackOpponent(req, res, next){
 
-      const player = players.find((player) => player.id === id);
+  const {id} = req.params;
+  const attack = req.body;
+  console.log(attack);
 
-      if(Object.keys(attack).length != 0 || !attack){
-        
-        player.clashers[0].health = player.clashers[0].health - attack.power;
-        return res.status(200).json(player.clashers[0].health);
-      }
+  const player = players.find((player) => player.id === id);
 
-      return res.status(200).json(player.clashers[0].health);
+  if(Object.keys(attack).length != 0 || !attack){
+    
+    player.clashers[0].health = player.clashers[0].health - attack.power;
+    return res.status(200).json(player.clashers[0].health);
+  }
 
-    }catch(e){
-        return next(e)
-    }
+  return res.status(200).json(player.clashers[0].health);
+
 }
+
+const getPlayersHandler = tryCatch(getPlayers);
+const getPlayerHandler = tryCatch(getPlayer);
+const createPlayerHandler = tryCatch(createPlayer);
+const addClasherHandler = tryCatch(addClasher);
+const attackOpponentHandler = tryCatch(attackOpponent);
+
+export { getPlayerHandler, getPlayersHandler, createPlayerHandler, addClasherHandler, attackOpponentHandler }
