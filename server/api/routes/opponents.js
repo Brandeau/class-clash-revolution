@@ -1,5 +1,13 @@
 import { players } from "../../data/players.js";
 
+/**
+ * Finds an opponent
+ * 
+ * @param {Response} req 
+ * @param {Request} res 
+ * @param {NextFunction} next 
+ * @returns {Response | void}
+ */
 export function getOpponentsHandler(req, res, next){
 
     const playerId = req.query.playerId;

@@ -6,6 +6,7 @@ import { players } from '../../data/players.js';
  */
 
 /**
+ * Retrieves a list of players
  * 
  * @param {Request} req 
  * @param {Response} res 
@@ -21,6 +22,7 @@ export function getPlayersHandler(req, res, next) {
 }
 
 /**
+ * Creates a full player object by adding a uui, empty clashers array and the isPlaying property, puts the player in an players array and responds with the player
  * 
  * @param {Request} req 
  * @param {Response} res 
@@ -47,6 +49,7 @@ export function createPlayerHandler(req, res, next){
 }
 
 /**
+ * Retrieves a player with a specific id
  * 
  * @param {Request} req 
  * @param {Response} res 
@@ -66,6 +69,14 @@ export function getPlayerHandler(req, res, next){
     }
 }
 
+/**
+ * Adds a clasher to the specified player
+ * 
+ * @param {Request} req 
+ * @param {Response} res 
+ * @param {NextFunction} next 
+ * @returns {Response | void}
+ */
 export function addClasherHandler(req, res, next){
     try{
         const {id} = req.params;
@@ -81,6 +92,14 @@ export function addClasherHandler(req, res, next){
     }
 }
 
+/**
+ * Handles the effect of an attack on the opponent's health
+ * 
+ * @param {Request} req 
+ * @param {Response} res 
+ * @param {NextFunction} next 
+ * @returns {Response | void}
+ */
 export function attackOpponentHandler(req, res, next){
     try{
       const {id} = req.params;

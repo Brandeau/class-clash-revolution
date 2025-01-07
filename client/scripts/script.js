@@ -9,6 +9,7 @@ let playerId;
 let clashers = [];
 
 /**
+ * Creates a player with only a nickname
  * 
  * @param {SubmitEvent} event 
  */
@@ -36,6 +37,7 @@ async function createBasePlayer(event){
 }
 
 /**
+ * Retrieves the player via UUID
  * 
  * @param {UUID} playerId 
  */
@@ -49,6 +51,9 @@ async function getPlayer(playerId){
     }
 }
 
+/**
+ * Adds the selected clasher to the clashers array
+ */
 async function chooseClasher(){
     
     const selectedChar = characterForm.elements.character.value;
@@ -56,7 +61,9 @@ async function chooseClasher(){
         const response = await fetch('http://localhost:3000/api/clashers');
         const data = await response.json();
 
-        clashers.push(data[selectedChar]);
+        const clasher = data.find((clasher) => clasher.name === selectedChar);
+
+        clashers.push(clasher);
 
     } catch(e){
 
@@ -85,8 +92,28 @@ async function addClasher(){
 
 }
 
+/**
+ * Searches for an opponent
+ */
+async function searchOpponent(){
+    try{
+        const response = await fetch(`http://localhost:3000/api/opponents?playerId=${playerId}`);
+        const data = await response.json();
+        
+        return data;
+
+    }catch(e){
+        console.error("Oops");
+    }
+}
+
+/**
+ * Handles each attack
+ */
 async function handleAttackButtonClick(){
-    const opponentId = "b5f5631e-915e-4a6a-827a-b2e82515f5a3";
+
+    const opponent = await searchOpponent();
+    const opponentId = opponent.id;
 
     try{
         const response = await fetch(`http://localhost:3000/api/players/${opponentId}/health`, {
@@ -106,6 +133,9 @@ async function handleAttackButtonClick(){
     }
 }
 
+/**
+ * Creates a list with the moves for the character
+ */
 async function createAttackList(){
     const moves = player.clashers[0].moveset;
     const attackUl = document.createElement("ul");
@@ -126,8 +156,14 @@ async function createAttackList(){
     attackSection.append(attackUl);
 }
 
+/**
+ * Initializes the fight
+ * 
+ * @param {SubmitEvent} event 
+ */
 async function startFightHandler(event){
     event.preventDefault();
+
     await chooseClasher();
     await addClasher();
     await createAttackList();
