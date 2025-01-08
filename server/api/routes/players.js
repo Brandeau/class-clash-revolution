@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 import { players } from '../../data/players.js';
-import { tryCatch } from '../../utils.js';
+import { tryCatch } from '../../../utils/tryCatch.js';
 import { create } from 'domain';
 
 /**
