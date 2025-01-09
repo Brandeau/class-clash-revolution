@@ -1,5 +1,5 @@
 import { clashers } from "../../data/clashers.js";
-import { tryCatch } from "../../utils.js";
+import { tryCatch } from "../../../utils/tryCatch.js";
 
 /**
  * @import {Request, Response, NextFunction} from "express";

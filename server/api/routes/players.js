@@ -1,7 +1,9 @@
 import crypto from 'crypto';
 import { players } from '../../data/players.js';
 import { tryCatch } from '../../../utils/tryCatch.js';
-import { create } from 'domain';
+import { CustomError } from '../../../utils/CustomError.js';
+import { findById } from '../../../utils/findById.js';
+import { INVALID_PLAYER_NAME, PLAYER_NOT_FOUND } from '../../data/errorCodes.js';
 
 /**
  * @import {Request, Response, NextFunction} from "express";
@@ -15,12 +17,10 @@ import { create } from 'domain';
  * @param {NextFunction} next 
  * @returns {Response | void}
  */
-function getPlayers(req, res, next) {
-    try {
-        return res.status(200).json(players);
-    } catch(e) {
-        return next(e);
-    }
+function getPlayers(req, res) {
+
+  return res.status(200).json(players);
+
 }
 
 /**
@@ -31,7 +31,7 @@ function getPlayers(req, res, next) {
  * @param {NextFunction} next 
  * @returns {Response | void}
  */
-function createPlayer(req, res, next){
+function createPlayer(req, res){
   const uuid = crypto.randomUUID();
   const {name} = req.body;
   const player = { 
@@ -42,6 +42,10 @@ function createPlayer(req, res, next){
   }
 
   players.push(player);
+
+  if(name.length < 3 || typeof name !== "string"){
+    throw new CustomError(INVALID_PLAYER_NAME, "Name must be a string of at least three characters", 400);
+  }
 
   return res.status(200).json(player);
 
@@ -55,11 +59,15 @@ function createPlayer(req, res, next){
  * @param {NextFunction} next 
  * @returns {Response | void}
  */
-function getPlayer(req, res, next){
+function getPlayer(req, res){
 
   const {id} = req.params;
 
-  const player = players.find((player) => player.id === id);
+  const player = findById(players, id)
+
+  if(!player){
+    throw new CustomError(PLAYER_NOT_FOUND, "Player not found", 404);
+  }
 
   return res.status(200).json(player);
 
@@ -73,14 +81,18 @@ function getPlayer(req, res, next){
  * @param {NextFunction} next 
  * @returns {Response | void}
  */
-function addClasher(req, res, next){
+function addClasher(req, res){
 
   const {id} = req.params;
   const newClasher = req.body;
 
-  const player = players.find((player) => player.id === id);
+  const player = findById(players, id);
 
   player.clashers.push(newClasher);
+
+  if(!player){
+    throw new CustomError(PLAYER_NOT_FOUND, "Player not found", 404);
+  }
 
   return res.status(200).json(player)
 
@@ -94,13 +106,16 @@ function addClasher(req, res, next){
  * @param {NextFunction} next 
  * @returns {Response | void}
  */
-function attackOpponent(req, res, next){
+function attackOpponent(req, res){
 
   const {id} = req.params;
   const attack = req.body;
-  console.log(attack);
 
-  const player = players.find((player) => player.id === id);
+  const player = findById(players, id);
+
+  if(!player){
+    throw new CustomError(PLAYER_NOT_FOUND, "Player not found", 404);
+  }
 
   if(Object.keys(attack).length != 0 || !attack){
     
